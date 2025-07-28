@@ -1,4 +1,4 @@
-import { useTheme } from '../hooks';
+import { useTheme } from 'next-pgn-viewer';
 
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();

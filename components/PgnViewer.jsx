@@ -1,12 +1,12 @@
 import React from 'react';
 import { NextChessground } from 'next-chessground';
-import { useEqualHeight, usePgnViewer, useShapes } from '../hooks';
+import { useEqualHeight, usePgnViewer, useShapes, useTheme } from '../hooks';
 import classNames from '../lib/classnames';
 import PgnTree from './PgnTree';
 import MoveArrows from './MoveArrows';
 import MoveModal from './MoveModal';
 
-const PgnViewer = ({ pgn, disabled, header, theme = 'dark' }) => {
+const PgnViewer = ({ pgn, disabled, header, theme: themeProp }) => {
   const {
     current, // Current moment in the PGN
     tree, // PGN tree structure
@@ -18,6 +18,16 @@ const PgnViewer = ({ pgn, disabled, header, theme = 'dark' }) => {
     onVariationChoice,
     onVariationsCancel,
   } = usePgnViewer(pgn);
+
+  // Use theme from context if available, otherwise fall back to prop or default
+  let theme = 'dark';
+  try {
+    const { theme: contextTheme } = useTheme();
+    theme = contextTheme;
+  } catch {
+    // No ThemeProvider found, use prop or default
+    theme = themeProp || 'dark';
+  }
 
   const handleMoveClick = (moment) => {
     if (!disabled) {

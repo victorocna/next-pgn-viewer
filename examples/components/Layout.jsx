@@ -1,7 +1,7 @@
 import Menu from './Menu';
 import MenuButton from './MenuButton';
 import NoSsr from './NoSsr';
-import { useTheme } from '../hooks';
+import { useTheme } from 'next-pgn-viewer';
 import mergeClassNames from 'merge-class-names';
 
 const Layout = ({ title, button, children }) => {
