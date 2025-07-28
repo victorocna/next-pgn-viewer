@@ -3,10 +3,10 @@ import { NextChessground } from 'next-chessground';
 import { useEqualHeight, usePgnViewer, useShapes, useTheme } from '../hooks';
 import classNames from '../lib/classnames';
 import PgnTree from './PgnTree';
-import MoveArrows from './MoveArrows';
+import BoardControls from './BoardControls';
 import MoveModal from './MoveModal';
 
-const PgnViewer = ({ pgn, disabled, header, theme: themeProp }) => {
+const PgnViewer = ({ pgn, disabled, header, controls, theme: themeProp }) => {
   const {
     current, // Current moment in the PGN
     tree, // PGN tree structure
@@ -51,7 +51,8 @@ const PgnViewer = ({ pgn, disabled, header, theme: themeProp }) => {
           shapes={shapes}
           onMove={onUserMove}
         />
-        <MoveArrows
+        <BoardControls
+          controls={controls}
           onPrevMove={goPrevMoment}
           onNextMove={goNextMoment}
           disabled={disabled}
