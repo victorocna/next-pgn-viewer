@@ -18,6 +18,9 @@
   flex-direction: column;
   gap: 1rem;
   align-items: stretch;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 /* Chess board section */
@@ -66,6 +69,8 @@
   position: relative;
   border-radius: 0.25rem;
   overflow: hidden;
+  flex: 1;
+  min-height: 0;
 }
 
 /* PGN tree header - Dark theme (default) */
@@ -102,16 +107,169 @@
   overflow-y: auto;
 }
 
-/* Responsive layout - Desktop: side by side, Mobile: stacked */
+/* Mobile-first: controls are in sticky bottom bar */
+.board-controls-desktop {
+  display: none;
+}
+
+/* Mobile Bottom Navigation */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #1a1a1a;
+  border-top: 1px solid #333;
+  z-index: 100;
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.3);
+  display: block;
+}
+
+.mobile-bottom-nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  max-width: 100%;
+}
+
+.mobile-bottom-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+/* Mobile control buttons styling */
+.mobile-control-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #9ca3af;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-direction: column;
+  min-width: 60px;
+  text-align: center;
+}
+
+.mobile-control-btn i {
+  font-size: 0.875rem;
+  margin-bottom: 0.125rem;
+}
+
+.mobile-control-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #d1d5db;
+}
+
+.mobile-control-btn.active {
+  background: #3b82f6;
+  color: white;
+}
+
+.mobile-control-btn.active:hover {
+  background: #2563eb;
+}
+
+/* Legacy button support */
+.mobile-bottom-nav-controls button:not(.mobile-control-btn) {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #60a5fa;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.mobile-bottom-nav-controls button:not(.mobile-control-btn):hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.mobile-bottom-nav-arrows {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mobile-nav-arrow-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #d1d5db;
+  width: 40px;
+  height: 40px;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-nav-arrow-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.mobile-nav-arrow-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Light theme mobile controls */
+.pgn-tree-light .mobile-bottom-nav {
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.pgn-tree-light .mobile-nav-arrow-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #374151;
+}
+
+.pgn-tree-light .mobile-nav-arrow-btn:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Add bottom padding to pgn-wrapper to account for sticky controls */
+.pgn-wrapper {
+  padding-bottom: 80px;
+}
+
+/* Desktop: side by side layout with desktop controls */
 @media (min-width: 768px) {
   .pgn-wrapper {
     flex-direction: row;
     align-items: flex-start;
+    padding-bottom: 0;
   }
 
   .pgn-wrapper .chess-board,
   .pgn-wrapper .pgn-tree-section {
     width: 50%;
+  }
+
+  .board-controls-desktop {
+    display: block;
+  }
+
+  .mobile-bottom-nav {
+    display: none;
   }
 }
 

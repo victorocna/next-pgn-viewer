@@ -4,6 +4,7 @@ import { useEqualHeight, usePgnViewer, useShapes, useTheme } from '../hooks';
 import classNames from '../lib/classnames';
 import PgnTree from './PgnTree';
 import BoardControls from './BoardControls';
+import MobileBoardControls from './MobileBoardControls';
 import MoveModal from './MoveModal';
 
 const PgnViewer = ({ pgn, disabled, header, controls, theme: themeProp }) => {
@@ -51,13 +52,15 @@ const PgnViewer = ({ pgn, disabled, header, controls, theme: themeProp }) => {
           shapes={shapes}
           onMove={onUserMove}
         />
-        <BoardControls
-          controls={controls}
-          onPrevMove={goPrevMoment}
-          onNextMove={goNextMoment}
-          disabled={disabled}
-          theme={theme}
-        />
+        <div className="board-controls-desktop">
+          <BoardControls
+            controls={controls}
+            onPrevMove={goPrevMoment}
+            onNextMove={goNextMoment}
+            disabled={disabled}
+            theme={theme}
+          />
+        </div>
       </div>
       <div ref={targetRef} className="pgn-tree-section">
         {header && (
@@ -83,6 +86,12 @@ const PgnViewer = ({ pgn, disabled, header, controls, theme: themeProp }) => {
           </div>
         )}
       </div>
+      <MobileBoardControls
+        controls={controls}
+        onPrevMove={goPrevMoment}
+        onNextMove={goNextMoment}
+        disabled={disabled}
+      />
     </div>
   );
 };
