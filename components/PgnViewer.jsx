@@ -2,14 +2,15 @@ import React from 'react';
 import { NextChessground } from 'next-chessground';
 import { useEqualHeight, usePgnViewer, useShapes } from '../hooks';
 import PgnTree from './PgnTree';
-import MoveArrows from './MoveArrows';
 import MoveModal from './MoveModal';
+import MoveArrows from './MoveArrows';
 
 const PgnViewer = ({ pgn, disabled, header }) => {
   const {
     current, // Current moment in the PGN
     tree, // PGN tree structure
     variations,
+    onUserMove,
     goNextMoment,
     goPrevMoment,
     goToMoment,
@@ -29,7 +30,11 @@ const PgnViewer = ({ pgn, disabled, header }) => {
   return (
     <div className="pgn-wrapper">
       <div ref={sourceRef} className="chess-board">
-        <NextChessground fen={current.fen} shapes={shapes} viewOnly={true} />
+        <NextChessground
+          fen={current.fen}
+          shapes={shapes}
+          onMove={onUserMove}
+        />
         <MoveArrows
           onPrevMove={goPrevMoment}
           onNextMove={goNextMoment}
