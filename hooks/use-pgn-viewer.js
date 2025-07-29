@@ -133,6 +133,16 @@ const usePgnViewer = (pgn, options) => {
     const userMove = last(chess.history({ verbose: true }));
     const newTree = addMomentToTree(treeState, userMove);
     setTree(newTree);
+
+    // Get the updated moments from the new tree and find the newly added moment
+    const newMoments = flatten(newTree);
+    const currentFens = new Set(moments.map((moment) => moment.fen));
+    const newMoment = newMoments.find((moment) => !currentFens.has(moment.fen));
+
+    if (newMoment) {
+      setCurrentMoment(newMoment);
+      setFen(newMoment.fen);
+    }
   };
 
   const handleUserMovesReset = () => {
