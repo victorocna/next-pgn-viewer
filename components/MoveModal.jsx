@@ -24,6 +24,7 @@ const MoveModal = ({ variations = [], onChoice, onCancel, onFocusChange }) => {
   // Handle keyboard events to change focus or choose a variation
   const onKeyDown = (event) => {
     event.preventDefault();
+    event.stopPropagation(); // Prevent event from reaching parent listeners
 
     if (event.key === 'ArrowDown') {
       setFocus((prev) => (prev + 1) % variations.length);
@@ -31,7 +32,7 @@ const MoveModal = ({ variations = [], onChoice, onCancel, onFocusChange }) => {
     if (event.key === 'ArrowUp') {
       setFocus((prev) => (prev - 1 + variations.length) % variations.length);
     }
-    if (event.key === 'ArrowLeft') {
+    if (event.key === 'ArrowLeft' || event.key === 'Escape') {
       onCancel();
     }
     if (event.key === 'ArrowRight') {
