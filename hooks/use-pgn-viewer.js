@@ -1,4 +1,5 @@
 import {
+  addMomentToTree,
   tree as chessTree,
   getNextMoments,
   getPrevMoment,
@@ -6,7 +7,7 @@ import {
 } from 'chess-moments';
 import { flatten, isEmpty, last } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
-import { coffee, getSideToMove, handleUserMoveVariations } from '../functions';
+import { coffee, getSideToMove } from '../functions';
 
 const usePgnViewer = (pgn, options) => {
   const {
@@ -30,9 +31,9 @@ const usePgnViewer = (pgn, options) => {
   const lastMoment = useMemo(() => moments[moments.length - 1], [moments]);
 
   // Determine which side has the first turn
-  const firstTurn = useMemo(() => getSideToMove(firstMoment?.fen), [
-    firstMoment,
-  ]);
+  const firstTurn = useMemo(() => {
+    return getSideToMove(firstMoment?.fen);
+  }, [firstMoment]);
 
   // Fallback to default moment if first moment is not available
   const defaultMoment = { fen: '', shapes: [] };
@@ -130,27 +131,18 @@ const usePgnViewer = (pgn, options) => {
 
   const handleUserMove = (chess) => {
     const userMove = last(chess.history({ verbose: true }));
-    const nextFen = chess.fen();
-
-    const nextMoments = getNextMoments(moments, currentMoment);
-    const expectedMoment = nextMoments.find(
-      (move) => move && move.move === userMove.san
-    );
-
-    if (expectedMoment) {
-      return setCurrentMoment(expectedMoment);
-    }
-
-    const { newTree, newMoment } = handleUserMoveVariations({
-      treeState,
-      currentMoment,
-      nextMoments,
-      nextFen,
-      userMove,
-    });
-
+    const newTree = addMomentToTree(treeState, userMove);
     setTree(newTree);
-    setCurrentMoment(newMoment);
+
+    // Get the updated moments from the new tree and find the newly added moment
+    const newMoments = flatten(newTree);
+    const currentFens = new Set(moments.map((moment) => moment.fen));
+    const newMoment = newMoments.find((moment) => !currentFens.has(moment.fen));
+
+    if (newMoment) {
+      setCurrentMoment(newMoment);
+      setFen(newMoment.fen);
+    }
   };
 
   const handleUserMovesReset = () => {

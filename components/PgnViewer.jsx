@@ -1,5 +1,6 @@
 import React from 'react';
 import { NextChessground } from 'next-chessground';
+import mergeClassNames from 'merge-class-names';
 import {
   ThemeProvider,
   useEqualHeight,
@@ -9,7 +10,6 @@ import {
 import PgnTree from './PgnTree';
 import BoardControls from './BoardControls';
 import MoveModal from './MoveModal';
-import mergeClassNames from 'merge-class-names';
 
 const PgnViewer = ({ pgn, disabled, header, controls, theme }) => {
   const {
