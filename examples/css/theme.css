@@ -195,13 +195,6 @@ button {
   transition-timing-function: ease;
 }
 
-/* Ensure proper contrast for focus states */
-button:focus:not(.theme-toggle-button),
-a:focus {
-  outline: 2px solid var(--text-secondary);
-  outline-offset: 2px;
-}
-
 /* Remove default focus outline for buttons that have custom focus styles */
 button:focus {
   outline: none;
