@@ -142,6 +142,12 @@ const usePgnViewer = (pgn, options) => {
     if (newMoment) {
       setCurrentMoment(newMoment);
       setFen(newMoment.fen);
+    } else {
+      const existingMoment = newMoments.find(
+        (moment) => moment.fen === userMove.after
+      );
+      setCurrentMoment(existingMoment);
+      setFen(userMove.after);
     }
   };
 
