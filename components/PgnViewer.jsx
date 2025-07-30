@@ -1,11 +1,17 @@
 import React from 'react';
 import { NextChessground } from 'next-chessground';
-import { useEqualHeight, usePgnViewer, useShapes } from '../hooks';
+import mergeClassNames from 'merge-class-names';
+import {
+  ThemeProvider,
+  useEqualHeight,
+  usePgnViewer,
+  useShapes,
+} from '../hooks';
 import PgnTree from './PgnTree';
+import BoardControls from './BoardControls';
 import MoveModal from './MoveModal';
-import MoveArrows from './MoveArrows';
 
-const PgnViewer = ({ pgn, disabled, header }) => {
+const PgnViewer = ({ pgn, disabled, header, controls, theme }) => {
   const {
     current, // Current moment in the PGN
     tree, // PGN tree structure
@@ -28,44 +34,54 @@ const PgnViewer = ({ pgn, disabled, header }) => {
   const { sourceRef, targetRef } = useEqualHeight(current);
 
   return (
-    <div className="pgn-wrapper">
-      <div ref={sourceRef} className="chess-board">
-        <NextChessground
-          fen={current.fen}
-          shapes={shapes}
-          onMove={onUserMove}
-        />
-        <MoveArrows
-          onPrevMove={goPrevMoment}
-          onNextMove={goNextMoment}
-          disabled={disabled}
-        />
-      </div>
-      <div ref={targetRef} className="pgn-tree-section pgn-tree-light">
-        {header && (
-          <div className="pgn-tree-header">
-            <p className="pgn-tree-header-title">{header}</p>
-          </div>
+    <ThemeProvider theme={theme}>
+      <div
+        className={mergeClassNames(
+          'pgn-wrapper',
+          theme === 'light' && 'pgn-tree-light'
         )}
-        <div className="pgn-tree-container">
-          <PgnTree
-            tree={tree}
-            current={current}
-            onMoveClick={handleMoveClick}
+      >
+        <div ref={sourceRef} className="chess-board">
+          <NextChessground
+            fen={current.fen}
+            shapes={shapes}
+            onMove={onUserMove}
           />
-        </div>
-        {variations && (
-          <div className="move-modal-container">
-            <MoveModal
-              variations={variations}
-              onChoice={onVariationChoice}
-              onCancel={onVariationsCancel}
-              onFocusChange={refocusModal}
+          <div className="board-controls-desktop">
+            <BoardControls
+              controls={controls}
+              onPrevMove={goPrevMoment}
+              onNextMove={goNextMoment}
+              disabled={disabled}
             />
           </div>
-        )}
+        </div>
+        <div ref={targetRef} className="pgn-tree-section">
+          {header && (
+            <div className="pgn-tree-header">
+              <p className="pgn-tree-header-title">{header}</p>
+            </div>
+          )}
+          <div className="pgn-tree-container">
+            <PgnTree
+              tree={tree}
+              current={current}
+              onMoveClick={handleMoveClick}
+            />
+          </div>
+          {variations && (
+            <div className="move-modal-container">
+              <MoveModal
+                variations={variations}
+                onChoice={onVariationChoice}
+                onCancel={onVariationsCancel}
+                onFocusChange={refocusModal}
+              />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 };
 

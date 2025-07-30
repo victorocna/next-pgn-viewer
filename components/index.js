@@ -1,3 +1,4 @@
+export { default as BoardControls } from './BoardControls';
 export { default as Comment } from './Comment';
 export { default as Move } from './Move';
 export { default as MoveArrows } from './MoveArrows';

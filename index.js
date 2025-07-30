@@ -1,5 +1,7 @@
+import BoardControls from './components/BoardControls';
 import PgnTree from './components/PgnTree';
 import PgnViewer from './components/PgnViewer';
+import { useTheme, ThemeProvider } from './hooks/use-theme';
 
 import './assets/css/buttons.css';
 import './assets/css/icons.css';
@@ -10,4 +12,10 @@ import './assets/css/tailwind.css';
 
 export default PgnViewer;
 
-export { PgnTree, PgnViewer };
+export {
+  BoardControls, //
+  PgnTree,
+  PgnViewer,
+  useTheme,
+  ThemeProvider,
+};
