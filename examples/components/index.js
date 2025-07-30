@@ -7,4 +7,3 @@ export { default as MenuButton } from './MenuButton';
 export { default as MenuItem } from './MenuItem';
 export { default as NoSsr } from './NoSsr';
 export { default as PgnFileLoader } from './PgnFileLoader';
-export { default as ThemeToggle } from './ThemeToggle';
