@@ -6,4 +6,3 @@ export { default as MoveModal } from './MoveModal';
 export { default as PgnTree } from './PgnTree';
 export { default as PgnViewer } from './PgnViewer';
 export { default as Shape } from './Shape';
-export { useTheme, ThemeProvider } from '../hooks/use-theme';
