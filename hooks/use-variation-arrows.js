@@ -19,7 +19,7 @@ const useVariationArrows = (current, variations, selectedVariationIndex) => {
     ) {
       return null;
     }
-    return getMoveArrow(current.fen, variations[selectedVariationIndex].move);
+    return getMoveArrow(current.fen, variations[selectedVariationIndex]);
   }, [current.fen, variations, selectedVariationIndex]);
 };
 

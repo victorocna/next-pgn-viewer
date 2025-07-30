@@ -1,14 +1,16 @@
 import { Chess } from 'chess.js';
 
 /**
- * Computes an arrow shape based on the current FEN and a move string.
+ * Computes an arrow shape based on the current FEN and a variation.
  * Returns null if the move is invalid.
  */
-const getMoveArrow = (fen, moveString) => {
+const getMoveArrow = (fen, variation) => {
   try {
-    if (!fen || !moveString) return null;
+    if (!fen || !variation || !variation.move) {
+      return null;
+    }
     const chess = new Chess(fen);
-    const move = chess.move(moveString, { sloppy: true });
+    const move = chess.move(variation.move, { sloppy: true });
     if (move) {
       return {
         orig: move.from,
