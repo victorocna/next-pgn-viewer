@@ -1,13 +1,7 @@
 import React from 'react';
 import MoveArrows from './MoveArrows';
 
-const BoardControls = ({
-  controls,
-  onPrevMove,
-  onNextMove,
-  disabled,
-  theme,
-}) => {
+const BoardControls = ({ controls, onPrevMove, onNextMove, disabled }) => {
   return (
     <div className="board-controls">
       <div className="board-controls-left">{controls}</div>
@@ -16,7 +10,6 @@ const BoardControls = ({
           onPrevMove={onPrevMove}
           onNextMove={onNextMove}
           disabled={disabled}
-          theme={theme}
         />
       </div>
     </div>

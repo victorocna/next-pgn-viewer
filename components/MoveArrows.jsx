@@ -1,7 +1,10 @@
 import React from 'react';
 import classNames from '../lib/classnames';
+import { useTheme } from '../hooks';
 
-const MoveArrows = ({ onPrevMove, onNextMove, disabled, theme }) => {
+const MoveArrows = ({ onPrevMove, onNextMove, disabled }) => {
+  const { theme } = useTheme();
+
   return (
     <div className="chess-board-controls">
       <button

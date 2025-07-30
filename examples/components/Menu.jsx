@@ -1,5 +1,4 @@
 import MenuItem from './MenuItem';
-import ThemeToggle from './ThemeToggle';
 
 const Menu = () => {
   return (
@@ -18,8 +17,8 @@ const Menu = () => {
       <nav className="nav-menu overflow-y-auto">
         <div className="flex flex-col py-8 lg:sticky lg:top-0">
           <MenuItem href="/">Basic example</MenuItem>
+          <MenuItem href="/light">Light theme</MenuItem>
           <MenuItem href="/editor">PGN editor</MenuItem>
-          <ThemeToggle />
         </div>
       </nav>
     </>

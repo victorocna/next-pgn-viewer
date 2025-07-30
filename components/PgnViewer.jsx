@@ -1,13 +1,17 @@
 import React from 'react';
 import { NextChessground } from 'next-chessground';
-import { useEqualHeight, usePgnViewer, useShapes, useTheme } from '../hooks';
-import classNames from '../lib/classnames';
+import {
+  ThemeProvider,
+  useEqualHeight,
+  usePgnViewer,
+  useShapes,
+} from '../hooks';
 import PgnTree from './PgnTree';
 import BoardControls from './BoardControls';
-import MobileBoardControls from './MobileBoardControls';
 import MoveModal from './MoveModal';
+import mergeClassNames from 'merge-class-names';
 
-const PgnViewer = ({ pgn, disabled, header, controls, theme: themeProp }) => {
+const PgnViewer = ({ pgn, disabled, header, controls, theme }) => {
   const {
     current, // Current moment in the PGN
     tree, // PGN tree structure
@@ -20,16 +24,6 @@ const PgnViewer = ({ pgn, disabled, header, controls, theme: themeProp }) => {
     onVariationsCancel,
   } = usePgnViewer(pgn);
 
-  // Use theme from context if available, otherwise fall back to prop or default
-  let theme = 'dark';
-  try {
-    const { theme: contextTheme } = useTheme();
-    theme = contextTheme;
-  } catch {
-    // No ThemeProvider found, use prop or default
-    theme = themeProp || 'dark';
-  }
-
   const handleMoveClick = (moment) => {
     if (!disabled) {
       goToMoment(moment);
@@ -40,59 +34,54 @@ const PgnViewer = ({ pgn, disabled, header, controls, theme: themeProp }) => {
   const { sourceRef, targetRef } = useEqualHeight(current);
 
   return (
-    <div
-      className={classNames(
-        'pgn-wrapper',
-        theme === 'light' && 'pgn-tree-light'
-      )}
-    >
-      <div ref={sourceRef} className="chess-board">
-        <NextChessground
-          fen={current.fen}
-          shapes={shapes}
-          onMove={onUserMove}
-        />
-        <div className="board-controls-desktop">
-          <BoardControls
-            controls={controls}
-            onPrevMove={goPrevMoment}
-            onNextMove={goNextMoment}
-            disabled={disabled}
-            theme={theme}
-          />
-        </div>
-      </div>
-      <div ref={targetRef} className="pgn-tree-section">
-        {header && (
-          <div className="pgn-tree-header">
-            <p className="pgn-tree-header-title">{header}</p>
-          </div>
+    <ThemeProvider theme={theme}>
+      <div
+        className={mergeClassNames(
+          'pgn-wrapper',
+          theme === 'light' && 'pgn-tree-light'
         )}
-        <div className="pgn-tree-container">
-          <PgnTree
-            tree={tree}
-            current={current}
-            onMoveClick={handleMoveClick}
+      >
+        <div ref={sourceRef} className="chess-board">
+          <NextChessground
+            fen={current.fen}
+            shapes={shapes}
+            onMove={onUserMove}
           />
-        </div>
-        {variations && (
-          <div className="move-modal-container">
-            <MoveModal
-              variations={variations}
-              onChoice={onVariationChoice}
-              onCancel={onVariationsCancel}
-              onFocusChange={refocusModal}
+          <div className="board-controls-desktop">
+            <BoardControls
+              controls={controls}
+              onPrevMove={goPrevMoment}
+              onNextMove={goNextMoment}
+              disabled={disabled}
             />
           </div>
-        )}
+        </div>
+        <div ref={targetRef} className="pgn-tree-section">
+          {header && (
+            <div className="pgn-tree-header">
+              <p className="pgn-tree-header-title">{header}</p>
+            </div>
+          )}
+          <div className="pgn-tree-container">
+            <PgnTree
+              tree={tree}
+              current={current}
+              onMoveClick={handleMoveClick}
+            />
+          </div>
+          {variations && (
+            <div className="move-modal-container">
+              <MoveModal
+                variations={variations}
+                onChoice={onVariationChoice}
+                onCancel={onVariationsCancel}
+                onFocusChange={refocusModal}
+              />
+            </div>
+          )}
+        </div>
       </div>
-      <MobileBoardControls
-        controls={controls}
-        onPrevMove={goPrevMoment}
-        onNextMove={goNextMoment}
-        disabled={disabled}
-      />
-    </div>
+    </ThemeProvider>
   );
 };
 
