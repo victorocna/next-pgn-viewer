@@ -1,4 +1,4 @@
-import { compact } from 'lodash';
+import { compact } from 'lodash-es';
 import { useState } from 'react';
 import useVariationArrows from './use-variation-arrows';
 

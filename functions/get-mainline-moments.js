@@ -1,4 +1,4 @@
-import { flatten } from 'lodash';
+import { flatten } from 'lodash-es';
 
 const getMainlineMoments = (moments) => {
   const flatMoments = flatten(moments);

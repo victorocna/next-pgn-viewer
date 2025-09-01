@@ -5,7 +5,7 @@ import {
   getPrevMoment,
   momentsToPgn,
 } from 'chess-moments';
-import { flatten, isEmpty, last } from 'lodash';
+import { flatten, isEmpty, last } from 'lodash-es';
 import { useEffect, useMemo, useState } from 'react';
 import { coffee, getSideToMove } from '../functions';
 

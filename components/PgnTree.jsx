@@ -1,5 +1,5 @@
 import React from 'react';
-import { isEmpty, omit } from 'lodash';
+import { isEmpty, omit } from 'lodash-es';
 import classnames from 'merge-class-names';
 import { Fragment, useEffect, useRef } from 'react';
 import Comment from './Comment';
