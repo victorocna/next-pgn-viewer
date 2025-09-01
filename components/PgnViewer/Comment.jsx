@@ -1,6 +1,3 @@
-import React from 'react';
-import Markdown from 'markdown-to-jsx';
-
 const Comment = ({ comment }) => {
   const formattedComment = comment
     .replaceAll('\\n', '\n') // Convert literal \n to actual newlines
@@ -9,7 +6,11 @@ const Comment = ({ comment }) => {
     .replace(/([^\s])\n/g, '$1  \n') // Add two spaces before single newlines for proper markdown line breaks
     .replace(/\n\n/g, '\n\n'); // Preserve double line breaks
 
-  return <Markdown>{formattedComment}</Markdown>;
+  return (
+    <div className="comment prose prose-invert tight-p no-indent max-w-none text-wrap break-words my-1">
+      {formattedComment}
+    </div>
+  );
 };
 
 export default Comment;

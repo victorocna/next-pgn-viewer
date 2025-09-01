@@ -1,17 +1,18 @@
 import {
   addMomentToTree,
   tree as chessTree,
+  findInsertedMoment,
   getNextMoments,
   getPrevMoment,
   momentsToPgn,
 } from 'chess-moments';
+import delay from 'delay';
 import { flatten, isEmpty, last } from 'lodash-es';
 import { useEffect, useMemo, useState } from 'react';
-import { coffee, getSideToMove } from '../functions';
 
 const usePgnViewer = (pgn, options) => {
   const {
-    autoSelectMainline = false,
+    autoSelectMainline = false, //
     initialMoveIndex = 0,
     useArrowsToMove = true,
   } = options || {};
@@ -30,17 +31,10 @@ const usePgnViewer = (pgn, options) => {
   const firstMoment = useMemo(() => moments[0], [moments]);
   const lastMoment = useMemo(() => moments[moments.length - 1], [moments]);
 
-  // Determine which side has the first turn
-  const firstTurn = useMemo(() => {
-    return getSideToMove(firstMoment?.fen);
-  }, [firstMoment]);
-
   // Fallback to default moment if first moment is not available
   const defaultMoment = { fen: '', shapes: [] };
 
-  const [currentMoment, setCurrentMoment] = useState(
-    firstMoment || defaultMoment
-  );
+  const [currentMoment, setCurrentMoment] = useState(firstMoment || defaultMoment);
   const [variations, setVariations] = useState(null);
   const [userMoves, setUserMoves] = useState(null);
 
@@ -59,11 +53,8 @@ const usePgnViewer = (pgn, options) => {
         setCurrentMoment(firstMoment || defaultMoment);
       }
     } else {
-      const mainLineMoves = moments.filter(
-        (move) => move.depth === 1 && move.move
-      );
-      const targetMove =
-        mainLineMoves[initialMoveIndex] || firstMoment || defaultMoment;
+      const mainLineMoves = moments.filter((move) => move.depth === 1 && move.move);
+      const targetMove = mainLineMoves[initialMoveIndex] || firstMoment || defaultMoment;
       setCurrentMoment(targetMove);
     }
     setVariations(null);
@@ -102,16 +93,11 @@ const usePgnViewer = (pgn, options) => {
     setUserMoves(null);
   };
 
-  const getNextMainlineMoment = () => {
-    const nextMoments = getNextMoments(moments, currentMoment);
-    return nextMoments[0] ?? null;
-  };
-
   const getMoveIndex = (moment) => {
-    if (!moment || !moments.length) return 0;
-    const mainLineMoves = moments.filter(
-      (move) => move.depth === 1 && move.move
-    );
+    if (!moment || !moments.length) {
+      return 0;
+    }
+    const mainLineMoves = moments.filter((move) => move.depth === 1 && move.move);
     const moveIndex = mainLineMoves.findIndex((move) => move.id === moment.id);
     return moveIndex >= 0 ? moveIndex : 0;
   };
@@ -119,7 +105,7 @@ const usePgnViewer = (pgn, options) => {
   // == Variations
   const handleVariationChoice = async (moveIndex) => {
     setCurrentMoment(moments[moveIndex]);
-    await coffee(10); // Simulate a delay for the variations to update
+    await delay(10); // Simulate a delay for the variations to update
     setVariations(null);
     setUserMoves(null);
   };
@@ -129,25 +115,26 @@ const usePgnViewer = (pgn, options) => {
     setUserMoves(null);
   };
 
+  const syncLastMove = (fen) => {
+    const existingMoment = moments.find((m) => m.fen === fen);
+    if (existingMoment) {
+      setCurrentMoment(existingMoment);
+      setFen(existingMoment.fen);
+    }
+  };
+
   const handleUserMove = (chess) => {
     const userMove = last(chess.history({ verbose: true }));
     const newTree = addMomentToTree(treeState, userMove);
+
+    // Update the tree and current moment
     setTree(newTree);
-
-    // Get the updated moments from the new tree and find the newly added moment
-    const newMoments = flatten(newTree);
-    const currentFens = new Set(moments.map((moment) => moment.fen));
-    const newMoment = newMoments.find((moment) => !currentFens.has(moment.fen));
-
+    const newMoment = findInsertedMoment(newTree);
     if (newMoment) {
       setCurrentMoment(newMoment);
       setFen(newMoment.fen);
     } else {
-      const existingMoment = newMoments.find(
-        (moment) => moment.fen === userMove.after
-      );
-      setCurrentMoment(existingMoment);
-      setFen(userMove.after);
+      syncLastMove(chess);
     }
   };
 
@@ -181,14 +168,13 @@ const usePgnViewer = (pgn, options) => {
     moments,
     currentMoment,
     current: currentMoment,
-    firstTurn,
     firstMoment,
     lastMoment,
     goPrevMoment,
     goNextMoment,
     goToMoment,
-    getNextMainlineMoment,
     getMoveIndex,
+    syncLastMove,
 
     variations,
     onVariationChoice: handleVariationChoice,

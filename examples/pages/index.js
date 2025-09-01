@@ -1,16 +1,12 @@
-import { Layout, PgnFileLoader } from '../components';
-import { PgnViewer } from 'next-pgn-viewer';
-import { useLocalPgn } from '../hooks';
+import { NextChessground } from 'next-chessground';
+import { Layout } from '../components';
 
 const Page = () => {
-  const { pgn, setPgn, key, rerender } = useLocalPgn();
-
   return (
-    <Layout
-      title="Basic example"
-      button={<PgnFileLoader rerender={rerender} onPgnLoad={setPgn} />}
-    >
-      <PgnViewer key={key} pgn={pgn} header="PGN Viewer" />
+    <Layout title="Basic example">
+      <div className="grid md:grid-cols-2 gap-12">
+        <NextChessground />
+      </div>
     </Layout>
   );
 };

@@ -17,8 +17,10 @@ const Menu = () => {
       <nav className="nav-menu overflow-y-auto">
         <div className="flex flex-col py-8 lg:sticky lg:top-0">
           <MenuItem href="/">Basic example</MenuItem>
-          <MenuItem href="/light">Light theme</MenuItem>
-          <MenuItem href="/editor">PGN editor</MenuItem>
+          <MenuItem href="/chess-puzzle">Chess puzzle</MenuItem>
+          <MenuItem href="/chess-drill">Chess drill</MenuItem>
+          <MenuItem href="/pgn-viewer">PGN viewer</MenuItem>
+          <MenuItem href="/pgn-editor">PGN editor</MenuItem>
         </div>
       </nav>
     </>

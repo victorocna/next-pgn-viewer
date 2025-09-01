@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { getMoveArrow } from '../functions';
+import { getMoveArrow } from '../functions/shape-helpers';
 
 /**
  * Custom hook that returns the variation arrow.
@@ -19,7 +19,7 @@ const useVariationArrows = (current, variations, selectedVariationIndex) => {
     ) {
       return null;
     }
-    return getMoveArrow(current.fen, variations[selectedVariationIndex]);
+    return getMoveArrow(current.fen, variations[selectedVariationIndex].move);
   }, [current.fen, variations, selectedVariationIndex]);
 };
 
